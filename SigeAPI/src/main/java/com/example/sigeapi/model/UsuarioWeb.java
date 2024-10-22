@@ -5,8 +5,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class UsuarioWeb {
 
     @Id
@@ -22,35 +26,4 @@ public class UsuarioWeb {
     @Column(name = "senha_w")
     private String senhaW;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNomeW() {
-        return nomeW;
-    }
-
-    public void setNomeW(String nomeW) {
-        this.nomeW = nomeW;
-    }
-
-    public String getEmailW() {
-        return emailW;
-    }
-
-    public void setEmailW(String emailW) {
-        this.emailW = emailW;
-    }
-
-    public String getSenhaW() {
-        return senhaW;
-    }
-
-    public void setSenhaW(String senhaW) {
-        this.senhaW = senhaW;
-    }
 }

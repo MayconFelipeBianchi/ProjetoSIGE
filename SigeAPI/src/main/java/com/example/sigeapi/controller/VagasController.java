@@ -22,11 +22,11 @@ public class VagasController {
         return new ResponseEntity<>(novaVaga, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Vagas>> listarVagas(@RequestParam(required = false) Integer estacionamentoId) {
-        List<Vagas> vagas = vagasService.listarVagasPorEstacionamento(estacionamentoId);
-        return new ResponseEntity<>(vagas, HttpStatus.OK);
-    }
+  //  @GetMapping
+   // public ResponseEntity<List<Vagas>> listarVagas(@RequestParam(required = false) Integer estacionamentoId) {
+     //   List<Vagas> vagas = vagasService.listarVagasPorEstacionamento(estacionamentoId);
+       // return new ResponseEntity<>(vagas, HttpStatus.OK);
+    //}
 
     @PutMapping("/{id}")
     public ResponseEntity<Vagas> atualizarVaga(@PathVariable Integer id, @RequestBody Vagas vaga) {

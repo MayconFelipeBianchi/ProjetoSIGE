@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>br.unipar.programacaoweb</groupId>
-    <artifactId>Clinica2</artifactId>
+    <artifactId>SigeAPI</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Clinica2</name>
-    <description>Clinica2</description>
+    <name>SigeAPI</name>
+    <description>SigeAPI</description>
     <properties>
         <java.version>17</java.version>
     </properties>

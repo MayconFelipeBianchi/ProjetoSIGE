@@ -19,9 +19,9 @@ public class VagasService {
         return vagaRepository.save(vaga);
     }
 
-    public List<Vagas> listarVagasPorEstacionamento(Integer estacionamentoId) {
-        return vagaRepository.findByEstacionamentoId(estacionamentoId);
-    }
+    //public List<Vagas> listarVagasPorEstacionamento(Integer estacionamentoId) {
+        //return vagaRepository.findByEstacionamentoId(estacionamentoId);
+    //}
 
     public Vagas atualizarStatusVaga(Integer id, boolean status) {
         return vagaRepository.findById(id)

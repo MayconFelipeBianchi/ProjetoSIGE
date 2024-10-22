@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface VagasRepository extends JpaRepository<Vagas, Integer> {
-    List<Vagas> findByEstacionamentoId(Integer estacionamentoId);
 }

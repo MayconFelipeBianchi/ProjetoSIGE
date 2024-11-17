@@ -17,9 +17,6 @@ public class UsuarioWeb {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "nome_w")
-    private String nomeW;
-
     @Column(name = "email_w")
     private String emailW;
 

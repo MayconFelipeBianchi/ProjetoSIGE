@@ -2,13 +2,18 @@ package com.example.sigeapi.service;
 
 import com.example.sigeapi.model.UsuarioWeb;
 import com.example.sigeapi.repository.UsuarioWebRepository;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioWebService {
+
     private final UsuarioWebRepository usuarioWebRepository;
 
+    @Autowired
     public UsuarioWebService(UsuarioWebRepository usuarioWebRepository) {
         this.usuarioWebRepository = usuarioWebRepository;
     }
@@ -22,12 +27,15 @@ public class UsuarioWebService {
     }
 
     public UsuarioWeb login(UsuarioWeb usuario) {
-        List<UsuarioWeb> userArray = this.usuarioWebRepository.findAll();
-        for (UsuarioWeb user : userArray) {
-            if (user.getNomeW() != null && user.getNomeW().equals(usuario.getNomeW()) && user.getSenhaW().equals(usuario.getSenhaW())) {
+        Optional<UsuarioWeb> usuarioOptional = usuarioWebRepository.findByEmailW(usuario.getEmailW());
+
+        if (usuarioOptional.isPresent()) {
+            UsuarioWeb user = usuarioOptional.get();
+            if (user.getSenhaW().equals(usuario.getSenhaW())) {
                 return user;
             }
         }
+
         return null;
     }
 }

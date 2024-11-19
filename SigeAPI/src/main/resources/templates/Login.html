@@ -127,10 +127,47 @@
         <input type="password" id="senha" placeholder="Digite sua senha...">
     </div>
     <div class="button-container">
-        <button class="back-button">Voltar</button>
-        <button class="login-button">Entrar</button>
+        <!-- Botão Voltar -->
+        <button class="back-button" onclick="window.location.href='/Acesso'">Voltar</button>
+
+        <button class="login-button" id="loginButton">Entrar</button>
     </div>
 </div>
+
+<script>
+    document.getElementById("loginButton").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const senha = document.getElementById("senha").value;
+
+        const usuarioData = {
+            emailW: email,
+            senhaW: senha
+        };
+
+        fetch("/api/usuarios/web/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(usuarioData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Login ou senha inválidos');
+                }
+            })
+            .then(data => {
+                window.location.href = "/Menu";
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+    });
+</script>
 
 </body>
 </html>

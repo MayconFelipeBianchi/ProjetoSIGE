@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Entity
 @Getter
 @Setter
@@ -23,4 +24,11 @@ public class UsuarioWeb {
     @Column(name = "senha_w")
     private String senhaW;
 
+    public UsuarioWeb(String emailW, String senhaW) {
+        this.emailW = emailW;
+        this.senhaW = senhaW;
+    }
+
+    public UsuarioWeb() {
+    }
 }

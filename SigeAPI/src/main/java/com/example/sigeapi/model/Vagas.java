@@ -1,18 +1,25 @@
-    package com.example.sigeapi.model;
+package com.example.sigeapi.model;
 
-    import jakarta.persistence.Entity;
-    import jakarta.persistence.Id;
-    import lombok.Getter;
-    import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-    import java.io.Serializable;
+@Entity
+@Getter
+@Setter
+@Table(name = "vagas")
+public class Vagas {
 
-    @Entity
-    @Getter
-    @Setter
-    public class Vagas implements Serializable {
-        @Id
-        public Integer id;
-        public int numero;
-        public boolean status;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "status", nullable = false)
+    private Integer status;
+
+    @ManyToOne
+    @JoinColumn(name = "estacionamento_id", nullable = false)
+    @JsonBackReference
+    private Estacionamento estacionamento;
+}

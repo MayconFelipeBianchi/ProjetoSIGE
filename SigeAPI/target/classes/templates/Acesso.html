@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>SIGE - Tela Inicial</title>
     <style>
-        /* Estilos gerais */
         * {
             margin: 0;
             padding: 0;
@@ -21,23 +20,20 @@
             background-color: #f5f5f5;
         }
 
-        /* Estilo do container principal */
         .container {
-            width: 400px;
+            width: 300px;
             padding: 20px;
             background-color: #4fb3bf;
             border-radius: 8px;
             text-align: center;
         }
 
-        /* Estilo do título */
         .container h1 {
             font-size: 24px;
             color: white;
             margin-bottom: 20px;
         }
 
-        /* Estilo do ícone de estacionamento */
         .icon {
             width: 80px;
             height: 80px;
@@ -56,58 +52,20 @@
             font-weight: bold;
         }
 
-        /* Estilos dos campos de entrada */
-        .form-group {
-            text-align: left;
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            font-size: 14px;
-            color: white;
-        }
-
-        .form-group input {
-            width: 100%;
+        .container button {
+            width: 80%;
             padding: 10px;
-            margin-top: 5px;
+            margin: 10px 0;
             border: none;
             border-radius: 20px;
-            background-color: #f3f3f3;
-        }
-
-        /* Estilos dos botões */
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .button-container button {
-            width: 45%;
-            padding: 10px;
-            border: none;
-            border-radius: 20px;
+            background-color: white;
+            color: #333;
             font-size: 16px;
             cursor: pointer;
         }
 
-        .button-container .back-button {
-            background-color: white;
-            color: #333;
-        }
-
-        .button-container .back-button:hover {
+        .container button:hover {
             background-color: #e0e0e0;
-        }
-
-        .button-container .login-button {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .button-container .login-button:hover {
-            background-color: #43a047;
         }
     </style>
 </head>
@@ -117,57 +75,9 @@
     <div class="icon">
         <span>E</span>
     </div>
-    <h1>Entrar</h1>
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" placeholder="Digite seu email...">
-    </div>
-    <div class="form-group">
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" placeholder="Digite sua senha...">
-    </div>
-    <div class="button-container">
-        <!-- Botão Voltar -->
-        <button class="back-button" onclick="window.location.href='/Acesso'">Voltar</button>
-
-        <button class="login-button" id="loginButton">Entrar</button>
-    </div>
+    <h1>SIGE</h1>
+    <button onclick="window.location.href='/Acesso'">Acessar</button>
+    <button onclick="window.location.href='/CadUsuario'">Cadastrar-se</button>
 </div>
-
-<script>
-    document.getElementById("loginButton").addEventListener("click", function(event) {
-        event.preventDefault();
-
-        const email = document.getElementById("email").value;
-        const senha = document.getElementById("senha").value;
-
-        const usuarioData = {
-            emailW: email,
-            senhaW: senha
-        };
-
-        fetch("/api/usuarios/web/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(usuarioData)
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Login ou senha inválidos');
-                }
-            })
-            .then(data => {
-                window.location.href = "/Menu";
-            })
-            .catch(error => {
-                alert(error.message);
-            });
-    });
-</script>
-
 </body>
 </html>

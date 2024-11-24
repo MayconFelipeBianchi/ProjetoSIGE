@@ -20,7 +20,7 @@
 
         .sidebar {
             width: 200px;
-            background-color: #1F5852; /* Cor alterada */
+            background-color: #1F5852;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -82,6 +82,20 @@
             font-weight: bold;
         }
 
+        .legend-box {
+            position: fixed;
+            bottom: 120px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            display: block;
+            font-size: 16px;
+            max-width: 250px;
+            text-align: center;
+        }
+
         .legend {
             text-align: right;
             font-size: 14px;
@@ -104,20 +118,30 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            color: white;
+            color: black;
+            cursor: pointer;
         }
 
         .spot.vazio {
-            background-color: white;
-            color: #333;
-        }
-
-        .spot.em-uso {
-            background-color: #4caf50;
+            background-color: white !important;
+            color: #333 !important;
         }
 
         .spot.em-manutencao {
-            background-color: #ffeb3b;
+            background-color: #ffeb3b !important;
+        }
+
+        .spot.em-uso {
+            background-color: #4caf50 !important;
+        }
+
+        .spot.selecionada {
+            border: 3px solid #ff9800;
+        }
+
+        .spot.finalizada {
+            background-color: white;
+            color: #333;
         }
 
         .bottom-buttons {
@@ -139,14 +163,14 @@
         }
 
         .bottom-buttons button:hover {
-            background-color: #FFFFFF;
+            background-color: #e0e0e0;
         }
 
-        .bottom-buttons .edit-button {
+        .bottom-buttons .editar-button {
             background-color: #2B857B;
         }
 
-        .bottom-buttons .edit-button:hover {
+        .bottom-buttons .editar-button:hover {
             background-color: #2B857B;
         }
 
@@ -160,13 +184,11 @@
     </style>
 </head>
 <body>
-
 <div class="sidebar">
     <div class="menu-title">Menu</div>
-    <button>Cadastrar Estacionamento</button>
-    <button>Cadastrar Vagas</button>
-    <button>Cadastrar Usuário</button>
-    <button>Manutenção</button>
+    <button onclick="window.location.href='/CadEstacionamento'">Cadastrar Estacionamento</button>
+    <button onclick="window.location.href='/CadVagas'">Cadastrar Vagas</button>
+    <button onclick="window.location.href='/Manutencao'">Manutenção</button>
 </div>
 
 <div class="main-content">
@@ -175,27 +197,112 @@
             <span>E</span>
         </div>
         <div class="legend">
-            <p><span style="color: #4caf50;">&#11044;</span> Em uso</p>
+            <p><span style="color: #4caf50;">&#11044;</span> Ocupada</p>
             <p><span style="color: white;">&#11044;</span> Vazia</p>
             <p><span style="color: #ffeb3b;">&#11044;</span> Em manutenção</p>
         </div>
     </div>
 
-    <div class="parking-spots">
-        <div class="spot vazio">Vaga 1</div>
-        <div class="spot em-uso">Vaga 2</div>
-        <div class="spot em-manutencao">Vaga 3</div>
-        <div class="spot vazio">Vaga 4</div>
-        <div class="spot em-uso">Vaga 5</div>
-        <div class="spot em-manutencao">Vaga 6</div>
-    </div>
+    <div class="parking-spots" id="parking-spots"></div>
 
     <div class="bottom-buttons">
-        <button class="voltar-button">Voltar</button>
-        <button class="edit-button">Editar</button>
-        <button class="finalize-button">Finalizar</button>
+        <button onclick="window.location.href='/Acesso'">Sair</button>
+        <!--<button class="editar-button" onclick="editarVaga()">Editar</button> -->
+        <button class="finalize-button" onclick="finalizarVaga()">Liberar</button>
     </div>
 </div>
+
+<div id="legend-box" class="legend-box">
+    Nenhuma vaga em manutenção
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('/api/vagas')
+            .then(response => response.json())
+            .then(vagas => {
+                let spotsContainer = document.getElementById('parking-spots');
+
+                fetch('/api/manutencao')
+                    .then(response => response.json())
+                    .then(manutencoes => {
+                        vagas.forEach(vaga => {
+                            let spot = document.createElement('div');
+                            spot.classList.add('spot');
+                            spot.setAttribute('data-id', vaga.id);
+                            spot.textContent = vaga.id;
+
+                            let status = vaga.status;
+
+                            switch (status) {
+                                case 0:
+                                    spot.classList.add('vazio');
+                                    break;
+                                case 1:
+                                    spot.classList.add('em-uso');
+                                    break;
+                                case 2:
+                                    spot.classList.add('em-manutencao');
+
+                                    let manutencao = manutencoes.find(m => m.vaga.id === vaga.id);
+
+                                    const legendBox = document.getElementById('legend-box');
+                                    if (manutencao) {
+                                        legendBox.textContent = `Vaga ${vaga.id}: ${manutencao.motivo}`;
+                                    } else {
+                                        legendBox.textContent = "Nenhuma vaga em manutenção";
+                                    }
+                                    break;
+                                default:
+                                    spot.style.backgroundColor = "#f40000"; // Caso de erro
+                                    break;
+                            }
+
+                            spot.onclick = function () {
+                                spot.classList.toggle('selecionada');
+                            };
+
+                            spotsContainer.appendChild(spot);
+                        });
+                    })
+                    .catch(error => console.error('Erro ao carregar as manutenções:', error));
+            })
+            .catch(error => console.error('Erro ao carregar as vagas:', error));
+    });
+
+    function finalizarVaga() {
+        const vagaSelecionada = document.querySelector('.spot.selecionada');
+        const vagaId = vagaSelecionada?.getAttribute('data-id');
+
+        if (!vagaId) {
+            alert("Selecione uma vaga para finalizar.");
+            return;
+        }
+
+        fetch(`/api/vagas/finalizar/${vagaId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Vaga finalizada com sucesso:', data);
+
+                vagaSelecionada.style.backgroundColor = "white";
+                vagaSelecionada.classList.remove('selecionada');
+            })
+            .catch(error => {
+                console.error('Erro ao finalizar a vaga:', error);
+                alert("Ocorreu um erro ao tentar finalizar a vaga.");
+            });
+    }
+</script>
 
 </body>
 </html>

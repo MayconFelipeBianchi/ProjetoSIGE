@@ -1,7 +1,10 @@
 package com.example.sigeapi.controller;
 
 import com.example.sigeapi.model.Menu;
+import com.example.sigeapi.model.Vagas;
 import com.example.sigeapi.service.MenuService;
+import com.example.sigeapi.service.VagasService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +16,17 @@ public class MenuController {
 
     private final MenuService menuService;
 
+    @Autowired
+    private VagasService vagasService;
+
     public MenuController(MenuService menuService) {
         this.menuService = menuService;
+    }
+
+    @PutMapping("/finalizar/{id}")
+    public ResponseEntity<Vagas> finalizarVaga(@PathVariable Integer id) {
+        Vagas vagaAtualizada = vagasService.finalizarVaga(id);
+        return ResponseEntity.ok(vagaAtualizada);
     }
 
     @GetMapping
